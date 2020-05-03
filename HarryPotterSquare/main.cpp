@@ -90,6 +90,17 @@ void pic8() {
     }
 }
 
+void pic9() {
+    for (int x = 0; x < N; ++x) {
+        for (int y = 0; y < N; ++y)
+            std::cout << (
+               (x - y) / 11 != 0  ?
+               "#" : "."
+            );
+        std::cout << std::endl;
+    }
+}
+
 void pic13() {
     for (int x = 0; x < N; ++x) {
         for (int y = 0; y < N; ++y)
@@ -139,7 +150,7 @@ void pic22() {
     for (int x = 0; x < N; ++x) {
         for (int y = 0; y < N; ++y)
             std::cout << (
-              (x-y) % 4?
+              (x+y) % 3 == 0?
                "#" : "."
             );
         std::cout << std::endl;
@@ -171,7 +182,7 @@ void pic25() {
 
 int main() {
     pic1(); pic2(); pic3(); pic4(); pic5();
-    pic6(); pic7(); pic8();
+    pic6(); pic7(); pic8(); pic9();
                     pic13();
     pic16();                pic19(); pic20();
             pic22();        pic24(); pic25();
