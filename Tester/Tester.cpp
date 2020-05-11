@@ -9,9 +9,9 @@ namespace fs = std::filesystem;
 Tester::Tester(ITask& task, std::string path):
         m_task(task), m_path(std::move(path)) {}
     
-void Tester::RunTests(std::ostream& out) {
-    int test_nr = 0;
-    while (true) {
+void Tester::RunTests(const size_t n, std::ostream& out) {
+    size_t test_nr = 0;
+    while (test_nr <= n) {
         std::string common_prefix = m_path + "/test." + std::to_string(test_nr);
 
         std::string inFile  = common_prefix + ".in",

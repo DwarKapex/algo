@@ -9,6 +9,7 @@ class ITask {
 public:
     using DataType = std::vector<std::string>;
     virtual std::string Run(const DataType& data) = 0;
+    virtual ~ITask() {};
 };
 
 }
