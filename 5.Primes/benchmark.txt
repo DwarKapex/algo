@@ -1,0 +1,10 @@
+Benchmark for input data: 
+1. 10
+2. 2500
+3. 100000
+
+Primes Dividers : 0.5 us	223.5 us	28658 us	
+Primes Dividers2 : 2.5 us	11142 us	8.69053e+06 us	
+Primes Sieve : 1.5 us	122.5 us	5448 us	
+Primes SieveBitMap : 1 us	45.5 us	2416 us	
+Primes Sieve O(N) : 3 us	238.5 us	10473 us

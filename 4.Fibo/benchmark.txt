@@ -1,4 +1,9 @@
-Fibo Recursive : 633622 us
-Fibo Iter : 0.3 us
-Fibo Golden : 0.1 us
-Fibo Matrix : 13.5 us
+Benchmark for input data: 
+1. 2
+2. 15
+3. 38
+
+Fibo Recursive : 0 us	5.6 us	410375 us	
+Fibo Iter : 0.1 us	0.1 us	0.3 us	
+Fibo Golden : 0.1 us	0.1 us	0.1 us	
+Fibo Matrix : 7.9 us	12.1 us	11.8 us	
