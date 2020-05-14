@@ -39,7 +39,7 @@ bool Tester::RunTest(std::string in_file, std::string out_file) {
     std::string expected, exp;
     if (outFile.is_open()) {
         while(outFile >> exp) {
-            expected+=exp;
+            expected += exp + ' ';
         }
         outFile.close();
     }
