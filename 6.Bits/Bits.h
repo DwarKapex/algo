@@ -1,7 +1,7 @@
 #pragma once
 
 #include <ITask.h>
-
+#include <vector>
 namespace OtusAlgo {
 
 enum Piece : int
@@ -42,12 +42,21 @@ public:
 
 class BitFEN: public ITask {
 public:
+    using IntType = uint64_t;
+    using BoardType = std::vector<IntType>;
     std::string Run(const ITask::DataType&) override;
+    void PlacePieces(const std::string&);
+protected:
+    BoardType m_board = BoardType(12,0);
 };
 
-class BitStrickers: public Bits {
+class BitStrickers: public BitFEN {
 public:
-    IntType Calculate(IntType a) const override;
+    std::string Run(const ITask::DataType&) override;
+    IntType WhiteRookMoves(const std::string&);
+private:
+    IntType FindPiecePos(const std::string& fen, char piece);
+    bool IsBittable(IntType pos, char piece);
 };
 
 

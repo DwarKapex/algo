@@ -1,6 +1,7 @@
 #include "Bits.h"
 #include <iostream>
 #include <sstream>
+#include <cctype>
 namespace OtusAlgo {
 
 
@@ -62,13 +63,22 @@ auto BitFEN::Run(const ITask::DataType& data) -> std::string {
     if (data.empty()) {
         return "0";
     }
-    std::string fen = data.front();
     
-    std::vector<uint64_t> board(12,0);
+    PlacePieces(data.front());
+    std::string res = "";
+    for (const auto row: m_board) {
+        res += std::to_string(row) + " ";
+    }
+    return res;
+}
+
+auto BitFEN::PlacePieces(const std::string& fen) -> void {
+    // clean up afterprevious test
+    m_board = BoardType(12,0);
     // init position = 2^63
-    uint64_t pos = 9223372036854775808UL;
+    IntType pos = 9223372036854775808UL;
     // move it to the beginning of the row
-    uint64_t piece_pos = pos >> 7;
+    IntType piece_pos = pos >> 7;
     size_t move = 1;
     for (const auto item: fen) {
         move = 1;
@@ -80,51 +90,51 @@ auto BitFEN::Run(const ITask::DataType& data) -> std::string {
                 break;
                 
             case 'K':
-               board[Piece::whiteKing] |= piece_pos;
+               m_board[Piece::whiteKing] |= piece_pos;
                break;
 
              case 'Q':
-                 board[Piece::whiteQueens] |= piece_pos;
+                 m_board[Piece::whiteQueens] |= piece_pos;
                  break;
 
               case 'R':
-                  board[Piece::whiteRooks] |= piece_pos;
+                  m_board[Piece::whiteRooks] |= piece_pos;
                   break;
 
               case 'B':
-                  board[Piece::whiteBishops] |= piece_pos;
+                  m_board[Piece::whiteBishops] |= piece_pos;
                   break;
 
               case 'N':
-                  board[Piece::whiteKnights] |= piece_pos;
+                  m_board[Piece::whiteKnights] |= piece_pos;
                   break;
                        
               case 'P':
-                  board[Piece::whitePawns] |= piece_pos;
+                  m_board[Piece::whitePawns] |= piece_pos;
                   break;
 
               case 'k':
-                  board[Piece::blackKing] |= piece_pos;
+                  m_board[Piece::blackKing] |= piece_pos;
                   break;
 
               case 'q':
-                   board[Piece::blackQueens] |= piece_pos;
+                   m_board[Piece::blackQueens] |= piece_pos;
                    break;
 
                case 'r':
-                  board[Piece::blackRooks] |= piece_pos;
+                  m_board[Piece::blackRooks] |= piece_pos;
                   break;
 
                case 'b':
-                   board[Piece::blackBishops] |= piece_pos;
+                   m_board[Piece::blackBishops] |= piece_pos;
                    break;
 
                case 'n':
-                   board[Piece::blackKnights] |= piece_pos;
+                   m_board[Piece::blackKnights] |= piece_pos;
                    break;
 
                case 'p':
-                   board[Piece::blackPawns] |= piece_pos;
+                   m_board[Piece::blackPawns] |= piece_pos;
                    break;
 
                default:
@@ -134,15 +144,83 @@ auto BitFEN::Run(const ITask::DataType& data) -> std::string {
         piece_pos <<= move;
     }
     
-    std::string res = "";
-    for (const auto row: board) {
-        res += std::to_string(row) + " ";
-    }
-    return res;
 }
 
-//auto BitStrickers::Calculate(IntType a) const -> IntType {
-//    return {};
-//}
+std::string BitStrickers::Run(const ITask::DataType& data) {
+    using OtusAlgo::Piece;
+    if (data.empty()) {
+        return "0";
+    }
+    
+    std::string fen = data.front();
+    PlacePieces(fen);
+    std::string res = "";
+    for (const auto row: m_board) {
+        res += std::to_string(row) + " ";
+    }
+    return std::to_string(WhiteRookMoves(fen));
+}
+
+auto BitStrickers::WhiteRookMoves(const std::string& fen) -> IntType {
+    // find white rook
+    size_t rook_pos = FindPiecePos(fen, 'R');
+    
+    IntType rook_mask = 1UL << rook_pos;
+    // up
+    int step = 8;
+    IntType pos = rook_mask >> step;
+    while(pos != 0) {
+        if (m_board[rook_pos]) {
+            
+        }
+        else {
+            rook_mask |= pos;
+            pos >>= step;
+        }
+        
+    }
+    return rook_mask;
+}
+
+auto BitStrickers::IsBittable(IntType pos, char piece) -> bool {
+    // by default it piece is white
+    size_t start = Piece::blackPawns,
+           end = Piece::whiteKing;
+
+    if (piece != std::tolower(piece)) {
+        start = Piece::blackPawns;
+        end = Piece::blackPawns;
+    }
+    for (size_t i = start; i <= end; ++i) {
+        if (pos & m_board[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+
+auto BitStrickers::FindPiecePos(const std::string& fen, char piece) -> IntType {
+    IntType pos = 9223372036854775808UL;
+    // move it to the beginning of the row
+    IntType piece_pos = pos >> 7;
+    size_t move;
+    for (const auto item: fen) {
+        move = 1;
+        if (item == '/') {
+            pos >>=8;
+            piece_pos = pos >> 7;
+            move = 0;
+        }
+        else if (item == piece) {
+            return piece_pos;
+        }
+        else {
+            move = int(item-'0');
+        }
+        piece_pos <<= move;
+    }
+    return 0;
+}
 
 } //namespace OtusAlgo
