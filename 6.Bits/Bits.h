@@ -2,6 +2,8 @@
 
 #include <ITask.h>
 #include <vector>
+#include <optional>
+
 namespace OtusAlgo {
 
 enum Piece : int
@@ -53,10 +55,15 @@ protected:
 class BitStrickers: public BitFEN {
 public:
     std::string Run(const ITask::DataType&) override;
-    IntType WhiteRookMoves(const std::string&);
+    IntType RookMoves(const std::string&, char);
+    IntType BishopMoves(const std::string&, char);
+    IntType QueenMoves(const std::string&, char);
+
 private:
     IntType FindPiecePos(const std::string& fen, char piece);
-    bool IsBittable(IntType pos, char piece);
+    
+    std::optional<bool> IsBittable(IntType pos, char piece);
+    void UpdateMask(IntType& mask, int pos, int step, int max_steps);
 };
 
 

@@ -2,6 +2,8 @@
 #include <iostream>
 #include <sstream>
 #include <cctype>
+#include <optional>
+
 namespace OtusAlgo {
 
 
@@ -158,69 +160,115 @@ std::string BitStrickers::Run(const ITask::DataType& data) {
     for (const auto row: m_board) {
         res += std::to_string(row) + " ";
     }
-    return std::to_string(WhiteRookMoves(fen));
+    return //std::to_string(WhiteRookMoves(fen)) + " ";
+    std::to_string(RookMoves(fen, 'R')) + " " + std::to_string(BishopMoves(fen, 'B')) + " " +
+            std::to_string(QueenMoves(fen, 'Q')) + " ";
 }
 
-auto BitStrickers::WhiteRookMoves(const std::string& fen) -> IntType {
+auto BitStrickers::RookMoves(const std::string& fen, char piece) -> IntType {
     // find white rook
-    size_t rook_pos = FindPiecePos(fen, 'R');
-    
-    IntType rook_mask = 1UL << rook_pos;
+    const int rook_pos = FindPiecePos(fen, piece);
+    if (rook_pos < 0)
+        return 0;
+    IntType rook_mask = 0;// = 1UL << rook_pos;
+    // down
+    UpdateMask(rook_mask, rook_pos, -8, rook_pos/8);
     // up
-    int step = 8;
-    IntType pos = rook_mask >> step;
-    while(pos != 0) {
-        if (m_board[rook_pos]) {
-            
-        }
-        else {
-            rook_mask |= pos;
-            pos >>= step;
-        }
-        
-    }
+    UpdateMask(rook_mask, rook_pos, 8, 7-rook_pos/8);
+    // left
+    UpdateMask(rook_mask, rook_pos, -1, rook_pos % 8);
+    // right
+    UpdateMask(rook_mask, rook_pos, 1, 7 - rook_pos % 8);
+
     return rook_mask;
 }
 
-auto BitStrickers::IsBittable(IntType pos, char piece) -> bool {
-    // by default it piece is white
-    size_t start = Piece::blackPawns,
-           end = Piece::whiteKing;
+auto BitStrickers::BishopMoves(const std::string& fen, char piece = 'B') -> IntType {
+//    // find white bishop
+    const int bishop_pos = FindPiecePos(fen, piece);
+    if (bishop_pos < 0)
+        return {};
+    IntType bishop_mask = 0;// = 1UL << bishop_pos;
+    // up-left
+    UpdateMask(bishop_mask, bishop_pos, 7, std::min(bishop_pos % 8, 7 - bishop_pos/8));
+    // up-right
+    UpdateMask(bishop_mask, bishop_pos, 9, std::min(7 - bishop_pos % 8, 7 - bishop_pos/8));
+    // down-left
+    UpdateMask(bishop_mask, bishop_pos, -9, std::min(bishop_pos % 8, bishop_pos/8));
+    // down-right
+    UpdateMask(bishop_mask, bishop_pos, -7, std::min(7 - bishop_pos % 8, bishop_pos/8));
 
-    if (piece != std::tolower(piece)) {
-        start = Piece::blackPawns;
-        end = Piece::blackPawns;
+    return bishop_mask;
+
+}
+
+auto BitStrickers::QueenMoves(const std::string& fen, char piece) -> IntType {
+    return RookMoves(fen, piece) | BishopMoves(fen, piece);
+}
+
+void BitStrickers::UpdateMask(IntType& mask, int pos, int step, int max_steps) {
+    pos+=step;
+    while(max_steps>0) {
+        --max_steps;
+        auto bittable = IsBittable(pos, 'R');
+        if (bittable.has_value()) {
+            if (bittable.value()) {
+                mask |= (1UL << pos);
+            }
+            break;
+        }
+        else {
+            mask |= (1UL << pos);
+        }
+        pos += step;
     }
-    for (size_t i = start; i <= end; ++i) {
-        if (pos & m_board[i]) {
-            return true;
+}
+
+auto BitStrickers::IsBittable(IntType pos, char piece) -> std::optional<bool> {
+    // check white pieces on board
+    for (size_t i = 0; i <= Piece::whiteKing; ++i) {
+        if (m_board[i] & (1UL << pos)) {
+            if (piece == std::tolower(piece)) {
+                return {true};
+            }
+            else {
+                return {false};
+            }
         }
     }
-    return false;
+    // check black pieces on board
+    for (size_t i = Piece::blackPawns; i <= Piece::blackKing; ++i) {
+        if (m_board[i] & (1UL << pos)) {
+            if (piece == std::tolower(piece)) {
+                return {false};
+            }
+            else {
+                return {true};
+            }
+        }
+    }
+    return {};
 }
 
 
 auto BitStrickers::FindPiecePos(const std::string& fen, char piece) -> IntType {
-    IntType pos = 9223372036854775808UL;
+    size_t pos_2 = 56;
     // move it to the beginning of the row
-    IntType piece_pos = pos >> 7;
     size_t move;
     for (const auto item: fen) {
         move = 1;
         if (item == '/') {
-            pos >>=8;
-            piece_pos = pos >> 7;
-            move = 0;
+            move = -16;
         }
         else if (item == piece) {
-            return piece_pos;
+            return pos_2;
         }
-        else {
+        else if (int(item-'0') >=0 && int(item-'0') <= 9){
             move = int(item-'0');
         }
-        piece_pos <<= move;
+        pos_2 += move;
     }
-    return 0;
+    return -1;
 }
 
 } //namespace OtusAlgo
