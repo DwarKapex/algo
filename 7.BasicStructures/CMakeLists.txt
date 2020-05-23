@@ -1,6 +1,6 @@
 set(this BasicStructures)
 
-add_executable(${this} ${this}.cpp ${this}.h main.cpp)
+add_executable(${this} ${this}.cpp ${this}.h main.cpp SparceMatrix.h SparceMatrix.cpp)
 set_target_properties (${this} PROPERTIES
 	CXX_STANDARD 17
 	CXX_STANDARD_REQUIRED ON

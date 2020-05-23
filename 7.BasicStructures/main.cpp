@@ -85,7 +85,7 @@ int main() {
     OtusAlgo::VectorArray<int> vector_array;
     OtusAlgo::FactorArray<int> factor_array;
     OtusAlgo::VectorWrapper<int> vector_wrapper;
-    
+
     std::filesystem::path this_file = __FILE__;
     std::ofstream output(this_file.parent_path().string() + "/benchmark.txt");
 
@@ -129,7 +129,7 @@ int main() {
               "structured continuesly in RAM, we have to copy all elements from inserting index. So on avarage "
               "it is O(n) copying operations.";
 
-    
+
     // PriorityQueue
     OtusAlgo::PrioretyQueue<int> pq;
     pq.enqueue(1, 10);
@@ -138,14 +138,49 @@ int main() {
     pq.enqueue(3, 40);
     pq.enqueue(7, 50);
     pq.enqueue(1, 60);
-    
+
     std::string res = "";
     for (int i = 0; i < 6; ++i) {
         res += std::to_string(pq.dequeue()) + " ";
     }
-        
+
     std::string expected = "30 50 40 20 10 60 ";
     std::cout << "PriorityQueue output: " << res << " ; is equal to expected: " << std::boolalpha << (res == expected) << std::endl;
+    
+    // Sparce Matrix
+    constexpr int def_value = 0;
+    OtusAlgo::Matrix<int, def_value, 2> matrix;
+    const int N = 10;
+    
+    auto a = matrix[0][0];
+    
+    for (int i = 0; i < N; ++i)
+        matrix[i][i] = matrix[N-1-i][i] = i;
+
+    // chess order fill-in
+    for (size_t row = 0; row < N/2; ++row) {
+        for (size_t col = 0; col < N; col+=2){
+            matrix[2*row+1][col+1] = matrix[2*row][col] = def_value;
+        }
+    }
+
+    for (int row = 1; row <= 8; ++row) {
+        for (int col = 1; col <= 8; ++col){
+            std::cout << matrix[row][col];
+            if (col == 8) std::cout << std::endl;
+            else std::cout << " ";
+        }
+    }
+    std::cout << matrix.size() << std::endl;
+    
+    for (const auto& [key, value]: matrix){
+        std::string t;
+        for (const auto& c: key) {
+            t += std::to_string(c) + " ";
+        }
+        t = t.substr(0, t.size()-1);
+        std::cout << "[" <<  t << "] : " << value << std::endl;
+    }
     
     return 0;
 }

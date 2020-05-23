@@ -1,0 +1,25 @@
+	CVPixelBufferRef source; // This is your source buffer
+	FigPhotoCompressionSessionRef encodeSession = NULL;
+	OSStatus err = FigPhotoCompressionSessionCreate(kCFAllocatorDefault, NULL, &encodeSession);
+	assert_noerr(err, bail);
+
+	// open the container
+	containerOptions = @{
+				(__bridge id)kFigPhotoCompressionContainerOption_Format: @(kFigPhotoContainerFormat_JFIF),
+				(__bridge id)kFigPhotoCompressionContainerOption_BackingType: @(kFigPhotoImageContainerBackingType_Data), // This will give you a CFData, there are other outputs if you prefer
+				};
+	err = FigPhotoCompressionSessionOpenEmptyContainer(encodeSession, (__bridge CFDictionaryRef)containerOptions);
+	assert_noerr(err, bail);
+
+	// Compress the main image
+	encodingOptions = [NSMutableDictionary dictionary];
+	encodingOptions[(id)kFigPhotoCompressionOption_CodecType] = @(kCMVideoCodecType_HEVC);
+	encodingOptions[(id)kFigPhotoCompressionOption_Tiling] = @NO;
+	encodingOptions[(id)kFigPhotoCompressionOption_QualityControllerType] = @(kFigPhotoQualityControllerType_QualityValue);
+	encodingOptions[(id)kFigPhotoCompressionOption_QualityControllerParameters] = @{ (__bridge id)kFigPhotoQualityControllerParameter_QualityValue: @(0.95f) };
+
+	err = FigPhotoCompressionSessionAddImage(encodeSession, (__bridge CFDictionaryRef)encodingOptions, (CFTypeRef)source, &imageIndex);
+	assert_noerr(err, bail);
+
+	err = FigPhotoCompressionSessionCloseContainerAndCopyBacking(encodeSession, NULL, NULL, (CFTypeRef *)&encodedData);
+	assert_noerr(err, bail);

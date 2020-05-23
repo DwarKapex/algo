@@ -2,7 +2,11 @@
 
 #include <cstring>
 #include <vector>
-#include <list>
+#include <forward_list>
+#include <stdexcept>      // std::out_of_range
+#include <algorithm>
+#include <memory>
+#include "SparceMatrix.h"
 
 namespace OtusAlgo {
 
@@ -232,7 +236,7 @@ private:
 
 template<typename T>
 class PrioretyQueue {
-    using Queue = std::vector<std::list<T>>;
+    using Queue = std::vector<std::forward_list<T>>;
 public:
     void enqueue(int priority, T item) {
         if (!is_priority_correct(priority)) return;
@@ -242,6 +246,9 @@ public:
         m_queue[priority].push_back(item);
     }
     T dequeue() {
+        if (empty() == 0) {
+            throw std::out_of_range("No more elements to dequeue. The queue is empty.");
+        }
         T result = m_queue.back().front();
         m_queue.back().pop_front();
         while (!m_queue.empty() && m_queue.back().size() == 0) {
@@ -249,26 +256,13 @@ public:
         }
         return result;
     }
+    
+    size_t size() noexcept { return m_queue.size(); }
+    bool empty() noexcept { return size() == 0; }
 private:
     bool is_priority_correct(int priority) { return priority > 0; }
     Queue m_queue;
 };
 
-
-template <typename T>
-class SparseMatrix: public IArray<T> {
-    using Type = std::list<T>;
-public:
-    void add(T item) override {
-        
-    }
-    size_t size() const noexcept;
-    void add(T item, int index);
-    T get(int index) const noexcept;
-    T remove(int index);
-
-private:
-    Type m_array;
-}
 } //namespace OtusAlgo
 
