@@ -34,3 +34,6 @@ Summary: all sorting algorithms based on comparison of adjacent elements are
 	 (O(NlogN)) vs ShellSort (O(N^2))) shows the same performance on
 	 provided data. Conclusion: ShellSort behaves like O(NlogN) for provided
 	 set of tests.
+Best algorithm Award: it looks like, ShellSort based on Knuth sequence on average
+		      is better than other algorithms took into comparison. Good
+		      boy Knuth!
