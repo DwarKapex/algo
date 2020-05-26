@@ -1,0 +1,36 @@
+     array size         1        10       100      1000     10000    100000
+0.random
+  SelectionSort       786       731       931      5954    237499  21345601
+  InsertionSort       192       202       413      3796    206870  19892964
+ ShellSortBasic       242       112       248      1876     24004    265491
+ ShellSortKnuth       134        95       367      1986     23976    237431
+ShellSortLatest       157       178       247      1914     23717    307526
+       HeapSort       197       105       243      1887     26026    238923
+1.digits
+  SelectionSort      2544       757       824      4220    243209  22391378
+  InsertionSort       165       226       432      4193    205460  16566633
+ ShellSortBasic       173       105       243      1546     17455    171562
+ ShellSortKnuth       156       103       243      1667     15135    162163
+ShellSortLatest       136        92       226      1508     15293    176983
+       HeapSort       130        92       288      1809     16579    188084
+2.sorted
+  SelectionSort      6469       770       789      4847    244338  21860433
+  InsertionSort       140       189       227      2133     25803    660480
+ ShellSortBasic       240       113       335      1710     21685    226637
+ ShellSortKnuth       144       142       237      1803     21210    207126
+ShellSortLatest       122        96       248      1721     18894    211755
+       HeapSort       130       174       302      2328     26840    223359
+3.revers
+  SelectionSort      6298       834       856      5363    295283  27005498
+  InsertionSort       138       160       270      5763    387100  36761802
+ ShellSortBasic       127       110       249      1966     18630    194645
+ ShellSortKnuth       112        94       228      1696     20214    193482
+ShellSortLatest       218        87       262      2208     19242    261287
+       HeapSort       115        90       235      1849     23144    235393
+
+Summary: all sorting algorithms based on comparison of adjacent elements are
+	 obviously slower (by the factor of 10 for array size more than 10^4).
+	 One notices, that asymptotically better algorithm (HeapSort 
+	 (O(NlogN)) vs ShellSort (O(N^2))) shows the same performance on
+	 provided data. Conclusion: ShellSort behaves like O(NlogN) for provided
+	 set of tests.

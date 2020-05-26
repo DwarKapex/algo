@@ -9,7 +9,12 @@ namespace fs = std::filesystem;
 Tester::Tester(ITask& task, std::string path):
         m_task(task), m_path(std::move(path)) {}
     
-void Tester::RunTests(const size_t n, std::ostream& out) {
+void Tester::UpdateTask(ITask& new_task) {
+    m_task = new_task;
+}
+
+std::vector<size_t> Tester::RunTests(const size_t n, std::ostream& out) {
+    std::vector<size_t> times;
     size_t test_nr = 0;
     while (test_nr <= n) {
         std::string common_prefix = m_path + "/test." + std::to_string(test_nr);
@@ -19,9 +24,15 @@ void Tester::RunTests(const size_t n, std::ostream& out) {
         
         if (!fs::exists(inFile) || !fs::exists(outFile))
             break;
-        out << "Test # " << test_nr << " - " << std::boolalpha << RunTest(inFile, outFile) << std::endl;
+        auto start = std::chrono::system_clock::now();
+        bool result = RunTest(inFile, outFile);
+        auto end = std::chrono::system_clock::now();
+        auto us = std::chrono::duration_cast<std::chrono::microseconds>(end-start).count();
+        times.push_back(us);
+        out << "Test # " << test_nr << " - " << std::boolalpha << result << std::endl;
         ++test_nr;
     }
+    return times;
 }
 
 bool Tester::RunTest(std::string in_file, std::string out_file) {
