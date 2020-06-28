@@ -13,7 +13,7 @@ void benchmark_add(std::ofstream& output, OtusAlgo::IArray<T>& array, std::strin
     constexpr size_t INSERT_ELEMENTS = 100000;
     // singe_array
     auto start = std::chrono::system_clock::now();
-    for (int i = 0; i < INSERT_ELEMENTS; ++i) {
+    for (size_t i = 0; i < INSERT_ELEMENTS; ++i) {
         array.add(i);
     }
     auto end = std::chrono::system_clock::now();
@@ -27,12 +27,12 @@ void benchmark_insert_random(std::ofstream& output, OtusAlgo::IArray<T>& array, 
     output << name << '\t';
     constexpr size_t INSERT_ELEMENTS = 10000;
     std::vector<size_t> insert_pos;
-    for (int i = 0; i < INSERT_ELEMENTS; ++i) {
+    for (size_t i = 0; i < INSERT_ELEMENTS; ++i) {
         insert_pos.push_back((i*7 + 13) % 100000);
     }
     // singe_array
     auto start = std::chrono::system_clock::now();
-    for (int i = 0; i < INSERT_ELEMENTS; ++i) {
+    for (size_t i = 0; i < INSERT_ELEMENTS; ++i) {
         array.add(i, insert_pos[i]);
     }
     auto end = std::chrono::system_clock::now();
@@ -45,12 +45,12 @@ void benchmark_remove_random(std::ofstream& output, OtusAlgo::IArray<T>& array, 
     output << name << '\t';
     constexpr size_t REMOVE_ELEMENTS = 10000;
     std::vector<size_t> remove_pos;
-    for (int i = 0; i < REMOVE_ELEMENTS; ++i) {
+    for (size_t i = 0; i < REMOVE_ELEMENTS; ++i) {
         remove_pos.push_back((i*13 + 7) % array.size() - REMOVE_ELEMENTS);
     }
     // singe_array
     auto start = std::chrono::system_clock::now();
-    for (int i = 0; i < REMOVE_ELEMENTS; ++i) {
+    for (size_t i = 0; i < REMOVE_ELEMENTS; ++i) {
         array.remove(remove_pos[i]);
     }
     auto end = std::chrono::system_clock::now();
@@ -65,12 +65,12 @@ void benchmark_get_random(std::ofstream& output, OtusAlgo::IArray<T>& array, std
     output << name << '\t';
     constexpr size_t INSERT_ELEMENTS = 10000;
     std::vector<size_t> get_pos;
-    for (int i = 0; i < INSERT_ELEMENTS; ++i) {
+    for (size_t i = 0; i < INSERT_ELEMENTS; ++i) {
         get_pos.push_back((i*13 + 7) % array.size());
     }
     // singe_array
     auto start = std::chrono::system_clock::now();
-    for (int i = 0; i < INSERT_ELEMENTS; ++i) {
+    for (size_t i = 0; i < INSERT_ELEMENTS; ++i) {
         array.get(get_pos[i]);
     }
     auto end = std::chrono::system_clock::now();
@@ -91,7 +91,6 @@ int main() {
 
     // benchmark
     // insert back
-//    output << "Adding back 1000000 elements:\n";
     benchmark_add(output, single_array, "Single Array");
     benchmark_add(output, vector_array, "Vector Array");
     benchmark_add(output, factor_array, "Factor Array");
@@ -151,9 +150,9 @@ int main() {
     constexpr int def_value = 0;
     OtusAlgo::Matrix<int, def_value, 2> matrix;
     const int N = 10;
-    
+
     auto a = matrix[0][0];
-    
+
     for (int i = 0; i < N; ++i)
         matrix[i][i] = matrix[N-1-i][i] = i;
 
@@ -172,7 +171,7 @@ int main() {
         }
     }
     std::cout << matrix.size() << std::endl;
-    
+
     for (const auto& [key, value]: matrix){
         std::string t;
         for (const auto& c: key) {
@@ -181,6 +180,6 @@ int main() {
         t = t.substr(0, t.size()-1);
         std::cout << "[" <<  t << "] : " << value << std::endl;
     }
-    
+
     return 0;
 }

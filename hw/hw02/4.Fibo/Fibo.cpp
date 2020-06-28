@@ -10,7 +10,7 @@ std::string Fibo::Run(const ITask::DataType& data) {
     std::stringstream ss;
     ss << data.front();
     ss >> N;
-    return std::to_string(Calculate(N));
+    return std::to_string(Calculate(N)) + " ";
 }
 
 auto FiboRecursive::Calculate(IntType N) const -> IntType {

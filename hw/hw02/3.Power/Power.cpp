@@ -21,7 +21,7 @@ std::string Power::Run(const ITask::DataType& data) {
     std::ostringstream out;
     out.precision(precision);
     out << std::fixed << result;
-    return out.str();
+    return out.str() + " ";
 }
 
 

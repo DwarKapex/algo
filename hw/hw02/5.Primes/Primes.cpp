@@ -14,7 +14,7 @@ std::string Primes::Run(const ITask::DataType& data) {
     std::stringstream ss;
     ss << data[0];
     ss >> a;
-    return std::to_string(Calculate(a));
+    return std::to_string(Calculate(a)) + " ";
 }
 
 

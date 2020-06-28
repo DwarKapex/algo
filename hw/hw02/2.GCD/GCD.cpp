@@ -12,7 +12,7 @@ std::string GCD::Run(const ITask::DataType& data) {
     std::stringstream ss;
     ss << data[0] << " " << data[1];
     ss >> a >> b;
-    return std::to_string(Calculate(a, b));
+    return std::to_string(Calculate(a, b)) + ' ';
 }
 
 

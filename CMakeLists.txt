@@ -29,24 +29,7 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
     endif()
 endif()
 
-# The compiled library code is here
-# Simple test function
-add_subdirectory(Tester)
-# add homeworks done to the build tree
-set(hw_done 5)
-set(hw_number 1)
-while(hw_number LESS_EQUAL hw_done)
-    add_subdirectory(hw0${hw_number})
-    MATH(EXPR hw_number "${hw_number}+1")
-endwhile()
-#add_subdirectory()
-#add_subdirectory(HarryPotterSquare)
-#add_subdirectory(0.String)
-#add_subdirectory(1.Tickets)
-#add_subdirectory(2.GCD)
-#add_subdirectory(3.Power)
-#add_subdirectory(4.Fibo)
-#add_subdirectory(5.Primes)
-#add_subdirectory(6.Bits)
-#add_subdirectory(7.BasicStructures)
-#add_subdirectory(8.Sorts)
+# add homeworks done option
+set(HW_DONE 5 CACHE STRING "Fulfilled homework")
+add_subdirectory(hw)
+add_subdirectory(library)

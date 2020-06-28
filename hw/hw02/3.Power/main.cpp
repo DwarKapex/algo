@@ -16,7 +16,7 @@ void benchmark(const std::string& name,
                const std::vector<OtusAlgo::Power::IntType>& b) {
     constexpr size_t CYCLES = 10;
     output << name << " : ";
-    for (int i = 0; i < a.size(); ++i) {
+    for (size_t i = 0; i < a.size(); ++i) {
         auto start = std::chrono::system_clock::now();
         for (size_t j = 0; j < CYCLES; ++j){
             runner.Calculate(a[i],b[i]);
@@ -45,7 +45,7 @@ int main() {
     {
     OtusAlgo::PowerMultiplication p;
     OtusAlgo::Tester test(p, this_file.parent_path().string() + "/tests");
-    test.RunTests(6);
+    test.RunTests(5);
     // benchmark
     benchmark("Power Multiplication", output, p, as, bs);
     }

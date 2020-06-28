@@ -2,7 +2,7 @@
 
 #include <cstring>
 #include <vector>
-#include <forward_list>
+#include <list>
 #include <stdexcept>      // std::out_of_range
 #include <algorithm>
 #include <memory>
@@ -236,7 +236,7 @@ private:
 
 template<typename T>
 class PrioretyQueue {
-    using Queue = std::vector<std::forward_list<T>>;
+    using Queue = std::vector<std::list<T>>;
 public:
     void enqueue(int priority, T item) {
         if (!is_priority_correct(priority)) return;
@@ -246,7 +246,7 @@ public:
         m_queue[priority].push_back(item);
     }
     T dequeue() {
-        if (empty() == 0) {
+        if (empty()) {
             throw std::out_of_range("No more elements to dequeue. The queue is empty.");
         }
         T result = m_queue.back().front();

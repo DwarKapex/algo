@@ -1,0 +1,8 @@
+Benchmark for input data: 
+1. NOD(10,1)
+2. NOD(1234567890,12)
+3. NOD(1073676287,997)
+
+Euclid Sub : 0 us	161886 us	1677.6 us	
+Euclid Mod : 0 us	0 us	0.1 us	
+Euclid Stein : 0.1 us	0.2 us	0.3 us	
