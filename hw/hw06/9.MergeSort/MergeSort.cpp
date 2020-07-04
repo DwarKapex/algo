@@ -1,118 +1,71 @@
-#include "Sorts.h"
+#include <fstream>
+#include <filesystem>
+
 #include <iostream>
-#include <sstream>
-#include <algorithm>
+
 namespace OtusAlgo {
 
+//void ClassicMerge(std::fstream& fname, size_t left, size_t middle, size_t right) {
+//
+//    // copy data to temp file
+//    std::fstream f1("merge_sort_left",  std::ios::binary | std::ios::in | std::ios::out),
+//                 f2("merge_sort_right", std::ios::binary | std::ios::in | std::ios::out);
+//    constexpr size_t bytes = sizeof(uint16_t);
+//    uint16_t data = 0;
+//    fname.seekg(left*bytes,std::ios::beg);
+//    for (size_t i =  left; i < middle + 1; ++i) {
+//        uint16_t data = 0;
+//        fname.read(reinterpret_cast<char*>(&data), bytes);
+//        f1.write(reinterpret_cast<char*>(&data), bytes);
+//    }
+//    fname.seekg((middle+1)*bytes,std::ios::beg);
+//    for (size_t i =  middle + 1; i < right ; ++i) {
+//        fname.read(reinterpret_cast<char*>(&data), bytes);
+//        f2.write(reinterpret_cast<char*>(&data), bytes);
+//    }
+//    // merge sorted parts to original array
+//    fname.seekp(left*bytes,std::ios::beg);
+////    f1.seekg(0, std::ios::beg);
+////    f2.seekg(0, std::ios::beg);
+//    uint16_t l, r;
+//    if (!f1.eof() && !f2.eof()) {
+//        f1.read(reinterpret_cast<char*>(&l), bytes);
+//        f2.read(reinterpret_cast<char*>(&r), bytes);
+//    }
+//
+//    do {
+//        if (l < r) {
+//            fname.write(reinterpret_cast<char*>(&l), bytes);
+//            f1.read(reinterpret_cast<char*>(&l), bytes);
+//        }
+//        else {
+//            fname.write(reinterpret_cast<char*>(&r), bytes)
+//            f2.read(reinterpret_cast<char*>(&r), bytes);
+//        }
+//
+//    } while (!f1.eof() && !f2.eof());
+//
+//    while (!f1.eof()) {
+//        fname.write(reinterpret_cast<char*>(&l), bytes);
+//        f1.read(reinterpret_cast<char*>(&l), bytes);
+//    }
+//    while (!f2.eof()) {
+//        fname.write(reinterpret_cast<char*>(&r), bytes);
+//        f2.read(reinterpret_cast<char*>(&r), bytes);
+//    }
+//
+//
+//
+//}
+//
+//void ClassicMergeSort(std::fstream& fname, size_t left, size_t right) {
+//    if (left >= right)
+//        return;
+//    size_t middle = left + (right - left) / 2;
+//    ClassicMergeSort(fname, left, middle);
+//    ClassicMergeSort(fname, middle+1, right);
+//    ClassicMerge(fname, left, middle, right);
+//}
 
-std::string Sort::Run(const ITask::DataType& data) {
-    if (data.size() < 2) {
-        return "";
-    }
-    uint64_t n;
-    n = std::stoll(data[0]);
-    std::vector<IntType> arr;
-    arr.reserve(n);
-    
-    IntType a;
-    for (size_t i = 0; i < n; ++i) {
-        std::stringstream ss(data[i+1]);
-        ss >> a;
-        arr.push_back(a);
-    }
-    DoSort(arr);
-    std::stringstream res;
-    for (size_t i = 0; i < arr.size(); ++i) {
-        res << arr[i] << " ";
-    }
-    return res.str();
-}
-
-
-void BubbleSort::DoSort(std::vector<IntType>& arr) {
-    for (size_t i = 0; i < arr.size(); ++i) {
-        for (size_t j = 0; j < arr.size()-1; ++j){
-            if (arr[j] > arr[j+1]) {
-                std::swap(arr[j], arr[j+1]);
-            }
-        }
-    }
-}
-
-void SelectionSort::DoSort(std::vector<IntType>& arr) {
-    for (size_t i = 0; i < arr.size()-1; ++i) {
-        size_t min_pos = i;
-        IntType min = arr[i];
-        for (size_t j = i + 1; j < arr.size(); ++j) {
-            if (arr[j] < min){
-                min = arr[j];
-                min_pos = j;
-            }
-        }
-        std::swap(arr[i], arr[min_pos]);
-    }
-}
-
-void InsertionSort::DoSort(std::vector<IntType>& arr) {
-    for (size_t i = 1; i < arr.size(); ++i) {
-        IntType save = arr[i];
-        int j = i-1;
-        while (j >= 0 && arr[j] > save) {
-            arr[j+1] = arr[j];
-            --j;
-        }
-        std::swap(arr[j+1], save);
-    }
-}
-
-ShellSort::ShellSort(std::vector<size_t> steps):
-            m_steps(std::move(steps)) {}
-
-void ShellSort::DoSort(std::vector<IntType>& arr)  {
-    bool original = false;
-    if (m_steps.empty()) {
-        original = true;
-        size_t step = arr.size() / 2;
-        while (step > 0) {
-            m_steps.push_back(step);
-            step /= 2;
-        }
-    }
-    for (const auto step: m_steps) {
-        for (int i = 0; i + step < arr.size(); ++i) {
-            size_t j = i + step;
-            IntType temp = arr[j];
-            while ((j >= step) && (arr[j-step] > temp)) {
-                arr[j] = arr[j-step];
-                j -= step;
-            }
-            arr[j] = temp;
-        }
-    }
-    if (original) {
-        m_steps.clear();
-    }
-}
-
-void HeapSort::DoSort(std::vector<IntType>& arr) {
-    // make initial heap
-    for (int j = arr.size()/2 - 1; j>=0; --j) {
-        Heapify(arr, j, arr.size());
-    }
-    for (int j = arr.size()-1; j >=0; --j) {
-        std::swap(arr[0], arr[j]);
-        Heapify(arr, 0, j);
-    }
-}
-
-void HeapSort::Heapify(std::vector<IntType>& arr, size_t root, size_t size) {
-    size_t x = root;
-    size_t l = 2*x + 1, r = 2*x + 2;
-    if (l < size && arr[x] < arr[l]) x = l;
-    if (r < size && arr[x] < arr[r]) x = r;
-    if (x == root) return;
-    std::swap(arr[root], arr[x]);
-    Heapify(arr, x, size);
-}
 
 } //namespace OtusAlgo

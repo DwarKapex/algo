@@ -1,0 +1,20 @@
+    All times in milliseconds (ms)
+
+                Algorithm                 1e6                 1e7                 1e8                 1e9
+      ClassicMergeSort_32               17000              223000             1938000            15362000
+     ClassicMergeSort_128                5000               71000              634000             5682000
+     ClassicMergeSort_512                2000               34000              342000             3372000
+    ClassicMergeSort_1024                2000               27000              297000             2949000
+       Merge+QuickSort_32               15193              214934             1732601            14743901
+      Merge+QuickSort_128                4158               63169              578212             4948993
+      Merge+QuickSort_512                1635               23883              278480             2370480
+     Merge+QuickSort_1024                1169               16881              216091             1899228
+               BucketSort                 127                1206               14600              124081
+             CountingSort                  28                 207                2586               20740
+                RedixSort                1000                4000               52000              446000
+
+Summary:
+1. Disk IO operations are very slow, that's why more data to sort in-memory, better. As you can see, greater chunk -- less time to sort
+2. For small chunks MergeSort is similar to QuickSort.
+3. Linear sorts win, because of linear time complexity. And of course CountingSort takes the first space, because it goes through array only once.
+

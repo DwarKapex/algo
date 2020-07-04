@@ -7,4 +7,4 @@ set_target_properties (${this} PROPERTIES
 	COMPILE_OPTIONS "-Wpedantic;-Wall;-Wextra"
 )
 
-target_link_libraries(${this} tester_lib)
+target_link_libraries(${this} file_io)
