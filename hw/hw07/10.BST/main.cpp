@@ -169,7 +169,7 @@ void AVL_benchmark() {
 
     
 int main() {
-    SimpleBST_benchmark();
+//    SimpleBST_benchmark();
     AVL_benchmark();
     return 0;
 }

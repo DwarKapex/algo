@@ -1,7 +1,7 @@
 Insert 10000 numbers in range [0:9999]
 
-Sorted insert: 7771 ms
-Random insert: 8307 ms
+Sorted insert: 7856 ms
+Random insert: 8146 ms
 
 Search 1000 random numbers:
 Sorted tree search: 1 ms
@@ -9,8 +9,8 @@ Sorted tree search: 1 ms
 Random tree search: 1 ms
 
 Remove 1000 random numbers:
-Sorted tree remove: 2909 ms
+Sorted tree remove: 2825 ms
 
-Random tree remove: 3565 ms
+Random tree remove: 4699 ms
 
 Summary: it does not matter what you insert into AVL tree: rebalance always fixes the order and keep the tree as BST, but every rebalancing makes AVL removing/insertion slower with respect to simple BST
