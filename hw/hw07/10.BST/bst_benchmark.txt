@@ -1,0 +1,16 @@
+Insert 50000 numbers in range [0:49999]
+
+Sorted insert: 15702 ms
+Random insert: 85 ms
+
+Search 5000 random numbers:
+Sorted tree search: 1780 ms
+
+Random tree search: 11 ms
+
+Remove 5000 random numbers:
+Sorted tree remove: 5701 ms
+
+Random tree remove: 13 ms
+
+Summary: inserting (searching and removing) sorted values, we get result similar to list by EOD and insertion takes O(N). Inserting random numbers is insertion with O(log(N)) time complexity
