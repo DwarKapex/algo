@@ -30,6 +30,6 @@ if(CMAKE_PROJECT_NAME STREQUAL PROJECT_NAME)
 endif()
 
 # add homeworks done option
-set(HW_DONE 7 CACHE STRING "Fulfilled homework")
+set(HW_DONE 8 CACHE STRING "Fulfilled homework")
 add_subdirectory(hw)
 add_subdirectory(library)
