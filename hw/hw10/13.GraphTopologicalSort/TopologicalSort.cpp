@@ -4,10 +4,9 @@
 
 namespace OtusAlgo {
 
-std::vector<size_t> DemucronTopologicalSort(const DiGraph& graph) {
+std::vector<std::vector<size_t>> DemucronTopologicalSort(const DiGraph& graph) {
     size_t n = graph.V();
-    std::vector<size_t> result;
-    result.reserve(n);
+    std::vector<std::vector<size_t>> result;
     
     // fill in out edges
     std::vector<size_t> M(n, 0);
@@ -21,19 +20,23 @@ std::vector<size_t> DemucronTopologicalSort(const DiGraph& graph) {
     // do algo
     std::vector<bool> used(n, false);
     size_t added = 0;
-    while (result.size() < n) {
+    size_t level = 0;
+    size_t total = 0;
+    while (total < n) {
         // find source
+        result.push_back({});
         for (size_t i = 0; i < n; ++i) {
             if (M[i] == 0 && !used[i]) {
                 ++added;
-                result.push_back(i);
+                result[level].push_back(i);
                 used[i] = true;
             }
         }
+        total += added;
         if (added == 0)
             throw std::runtime_error("Loop detected. Topological sort is impossible!");
         // substruct from M
-        auto it = result.rbegin();
+        auto it = result[level].rbegin();
         while (added > 0) {
             OtusAlgo::DiGraph::adjIterator adjIt(graph, *it);
             for (auto it = adjIt.begin(); !adjIt.end(); it = adjIt.next()) {
@@ -42,6 +45,7 @@ std::vector<size_t> DemucronTopologicalSort(const DiGraph& graph) {
             ++it;
             added--;
         }
+        ++level;
     }
     
     return result;

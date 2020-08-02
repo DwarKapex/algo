@@ -5,18 +5,6 @@ int main() {
     
     using Graph = OtusAlgo::DiGraph;
     {
-        Graph graph(3);
-        graph.insert({0,1});
-        graph.insert({0,2});
-        graph.insert({1,2});
-        // Demucron Algo
-        auto received = OtusAlgo::DemucronTopologicalSort(graph);
-        std::vector<size_t> expected{0,1,2};
-        assert(received == expected);
-        auto received2 = OtusAlgo::TarjanTopologicalSort(graph);
-        assert(received2 == expected);
-    }
-    {
         Graph graph(14);
         graph.insert({0, 2});
         graph.insert({0, 12});
@@ -54,7 +42,7 @@ int main() {
         graph.insert({13, 5});
         
         auto received = OtusAlgo::DemucronTopologicalSort(graph);
-        std::vector<size_t> expected{4,7,1,8,9,0,6,13,5,3,10,11,12,2};
+        std::vector<std::vector<size_t>> expected{{4,7},{1,8,9},{0,6,13},{5},{3,10,11,12},{2}};
         assert(received == expected);
     }
     {
