@@ -31,5 +31,6 @@ endif()
 
 # add homeworks done option
 set(HW_DONE 8 CACHE STRING "Fulfilled homework")
-add_subdirectory(hw)
 add_subdirectory(library)
+add_subdirectory(hw)
+
