@@ -60,10 +60,23 @@ int main() {
     }
     
     // find bridge
+//    {
+//        Graph graph(5);
+//        graph.insert({0, 1});
+//        graph.insert({1, 2});
+//        graph.insert({0, 2});
+//        graph.insert({2, 0});
+//        graph.insert({2, 3});
+//        graph.insert({4, 3});
+//
+//        auto received = OtusAlgo::BridgeSearch(graph);
+//        std::vector<OtusAlgo::Edge> expected{{2,3}, {4,3}};
+//        assert(received == expected);
+//    }
+    
     {
         Graph graph(2);
         graph.insert({0, 1});
-        graph.insert({1, 0});
         
         auto received = OtusAlgo::BridgeSearch(graph);
         std::vector<OtusAlgo::Edge> expected{{0, 1}};

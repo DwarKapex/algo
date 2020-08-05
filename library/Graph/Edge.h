@@ -1,5 +1,6 @@
 #pragma once
 
+namespace OtusAlgo {
 // edge representation
 struct Edge {
     int from, to;
@@ -7,3 +8,7 @@ struct Edge {
           from(_from)
         , to(_to) {}
 };
+
+bool operator==(const Edge& lhs, const Edge& rhs);
+
+} //namespace OtusAlgo

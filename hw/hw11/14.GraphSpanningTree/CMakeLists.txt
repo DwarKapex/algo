@@ -1,7 +1,7 @@
-set(this TopologicalSort)
+set(this MinimalSpanningTree)
 
 # add main
-add_executable(main_${this} main.cpp ${this}.cpp ${this}.h GraphSearch.cpp GraphSearch.h)
+add_executable(main_${this} main.cpp ${this}.cpp ${this}.h)
 set_target_properties(main_${this} PROPERTIES
 	CXX_STANDARD 17
 	CXX_STANDARD_REQUIRED ON
@@ -11,6 +11,3 @@ set_target_properties(main_${this} PROPERTIES
 target_link_libraries(main_${this} graph)
 
 file(GLOB HEADER_LIST CONFIGURE_DEPENDS "*.h")
-
-# add test
-add_subdirectory(test)
