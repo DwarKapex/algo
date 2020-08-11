@@ -1,6 +1,4 @@
-#pragma once
-
-#include <DiGraph.h>
+#include "GraphSearch.h"
 
 namespace OtusAlgo {
 
@@ -44,7 +42,7 @@ std::vector<Edge> BridgeSearch(const DiGraph& graph) {
     
     return bridges;
 }
-std::vector<size_t> ArticulationPointSearch(const DiGraph& graph) {
+std::vector<size_t> ArticulationPointSearch([[maybe_unused]] const DiGraph& graph) {
     return {};
 }
 
