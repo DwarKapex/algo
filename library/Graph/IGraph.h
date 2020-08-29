@@ -5,7 +5,8 @@
 namespace OtusAlgo {
 
 class IGraph {
-private:
+public:
+    using WeightType = int;
 public:
     explicit IGraph(bool is_directed): m_is_directed(is_directed) {}
     ~IGraph() = default;
@@ -14,9 +15,9 @@ public:
     virtual size_t E() const = 0; // number of egdes
     bool is_directed() const { return m_is_directed; }
     
-    virtual void insert(Edge) = 0; // add edge
+    virtual void insert(Edge, WeightType weight) = 0; // add edge
     virtual void remove(Edge) = 0; // remove edge
-    virtual bool edge(int, int) const = 0; // chech edge presents
+    virtual WeightType edge(int, int) const = 0; // chech edge presents
 
 //    void insert(); // add a new vertex
 //    void remove(int); // remove vertex

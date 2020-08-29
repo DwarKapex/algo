@@ -1,11 +1,12 @@
 #pragma once
 
-#include <DiGraph.h>
+#include <DenceGraph.h>
 
 namespace OtusAlgo {
 
-std::vector<Edge> BridgeSearch(const DiGraph& graph);
-std::vector<size_t> ArticulationPointSearch(const DiGraph& graph);
+std::vector<Edge> KruscalMinimalSpanningTree(const DenceGraph& graph);
+std::vector<Edge> PrimaMinimalSpanningTree(const DenceGraph& graph);
+std::vector<Edge> BoruvkiMinimalSpanningTree(const DenceGraph& graph);
 
 } // namespace OtusAlgo
 

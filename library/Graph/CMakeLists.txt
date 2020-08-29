@@ -1,7 +1,7 @@
 set(this graph)
 # add headers to show up in the IDE
 file(GLOB HEADER_LIST CONFIGURE_DEPENDS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
-add_library(${this} DiGraph.cpp Edge.cpp ${HEADER_LIST})
+add_library(${this} DenceGraph.cpp DiGraph.cpp Edge.cpp ${HEADER_LIST})
 
 set_target_properties(${this} PROPERTIES
 		CXX_STANDARD 17

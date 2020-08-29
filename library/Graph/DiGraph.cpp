@@ -13,9 +13,9 @@ size_t DiGraph::E() const {
     return m_edge;
 }
 
-void DiGraph::insert(Edge edge) {
+void DiGraph::insert(Edge edge, WeightType w) {
     if (edge.from < V() && edge.to < V()) {
-        m_graph[edge.from][edge.to] = 1;
+        m_graph[edge.from][edge.to] = w;
     }
 }
 
@@ -26,7 +26,7 @@ void DiGraph::remove(Edge edge) {
 
 }
 
-bool DiGraph::edge(int from, int to) const {
+auto DiGraph::edge(int from, int to) const -> WeightType{
     if (from < V() && to < V()) {
         return m_graph[from][to] != 0;
     }

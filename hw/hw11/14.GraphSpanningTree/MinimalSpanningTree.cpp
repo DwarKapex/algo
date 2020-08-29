@@ -1,52 +1,120 @@
-#pragma once
-
-#include <DiGraph.h>
+#include "MinimalSpanningTree.h"
+#include <cassert>
+#include <numeric>
+#include <set>
 
 namespace OtusAlgo {
 
-void BridgeSearchUtil(const DiGraph& graph,
-                      int v, int p,
-                      std::vector<size_t>& tin, std::vector<size_t>& fup,
-                      std::vector<bool>& visited, size_t timer,
-                      std::vector<Edge>& bridges) {
-    visited[v] = true;
-    tin[v] = fup[v] = timer++;
-    OtusAlgo::DiGraph::adjIterator adjIt(graph, v);
-    for (auto to = adjIt.begin(); !adjIt.end(); to = adjIt.next()) {
-        if (v != p) {
-            if (to == p) continue;
-            if (visited[to]) {
-                fup[v] = std::min(fup[v], tin[to]);
-            }
-            else {
-                BridgeSearchUtil(graph, to, v, tin, fup, visited, timer, bridges);
-                fup[v] = std::min(fup[v], fup[to]);
-                if (fup[to] > tin[v])
-                    bridges.emplace_back(v,to);
-            }
+// ----------------------------------------------------
+#pragma mark Kruscal Minimal Spanning Tree Algorithm
+// ----------------------------------------------------
+
+auto GetAllEdges(const DenceGraph& graph) -> std::vector<std::pair<Edge, DenceGraph::WeightType>>{
+    std::vector<std::pair<Edge, DenceGraph::WeightType>> all_edges;
+    all_edges.reserve(graph.E());
+    for (int from = 0; from < graph.V(); ++from) {
+        OtusAlgo::DenceGraph::adjIterator adjIt(graph, from);
+        for (auto to = adjIt.begin(); to <= from && !adjIt.end(); to = adjIt.next()) {
+            all_edges.push_back({{from, to}, graph.edge(from, to)});
         }
     }
-    
+    assert(all_edges.size() == graph.E());
+    return all_edges;
 }
-std::vector<Edge> BridgeSearch(const DiGraph& graph) {
+
+int FindParent(const std::vector<int>& parent, int child) {
+    if (parent[child] == child)
+        return child;
+    else
+        return FindParent(parent, parent[child]);
+}
+
+void Union(std::vector<int>& parent, int x, int y) {
+    if (x < y)
+        std::swap(x,y);
+    parent[x] = parent[y];
+}
+std::vector<Edge> KruscalMinimalSpanningTree(const DenceGraph& graph) {
+    // compile edge array sorted by length
+    auto sorted_edges = GetAllEdges(graph);
+    std::sort(sorted_edges.begin(), sorted_edges.end(),
+              [](const auto& a, const auto& b){
+                return a.second < b.second;
+    });
+    std::vector<Edge> spanning_tree;
     size_t n = graph.V();
-    size_t timer = 0;
-    std::vector<Edge> bridges;
-    std::vector<bool> visited(n, false);
-    std::vector<size_t> tin(n, 0), fup(n, 0);
-    for (size_t idx = 0; idx < n; ++idx) {
-        if (!visited[idx]) {
-            BridgeSearchUtil(graph, idx, -1,
-                             tin, fup,
-                             visited, timer, bridges);
+    spanning_tree.reserve(n);
+    std::vector<int> parent(n);
+    std::iota(parent.begin(), parent.end(), 0);
+    
+    for (const auto& edge: sorted_edges) {
+        int x = FindParent(parent, edge.first.from);
+        int y = FindParent(parent, edge.first.to);
+        if (x != y) {
+            spanning_tree.emplace_back(edge.first.from, edge.first.to);
+            Union(parent, x, y);
         }
     }
     
-    return bridges;
+    return spanning_tree;
 }
-std::vector<size_t> ArticulationPointSearch(const DiGraph& graph) {
+
+// ----------------------------------------------------
+#pragma mark Prima Minimal Spanning Tree Algorithm
+// ----------------------------------------------------
+
+
+std::vector<Edge> PrimaMinimalSpanningTree(const DenceGraph& graph) {
+    using WeightType = DenceGraph::WeightType;
+    using DenseEdge = std::pair<Edge, WeightType>;
+    WeightType INF = std::numeric_limits<WeightType>::max();
+    
+    size_t n = graph.V();
+    std::vector<Edge> spanning_tree;
+    spanning_tree.reserve(n-1);
+
+    // used vertices
+    std::vector<DenseEdge> remain_vertices(n);
+    std::vector<bool> used (n, false);
+    std::vector<int> min_edge_weight (n, INF), selected_edge (n, -1);
+    min_edge_weight[0] = 0;
+    
+    for (int i = 0; i < n; ++i) {
+        int v = -1;
+        for (int j = 0; j < n; ++j) {
+            if (!used[j] && (v == -1 || min_edge_weight[j] < min_edge_weight[v]))
+                v = j;
+        }
+        if (min_edge_weight[v] == INF) {
+            throw std::runtime_error("There is no MST in this graph!");
+        }
+     
+        used[v] = true;
+        if (selected_edge[v] != -1) {
+            
+            spanning_tree.push_back({std::max(v,selected_edge[v]), std::min(v,selected_edge[v])});
+        }
+        OtusAlgo::DenceGraph::adjIterator adjIt(graph, v);
+        for (auto to = adjIt.begin(); !adjIt.end(); to = adjIt.next()) {
+            if (graph.edge(v,to) < min_edge_weight[to]) {
+                min_edge_weight[to] = graph.edge(v,to);
+                selected_edge[to] = v;
+            }
+        }
+    }
+    
+    return spanning_tree;
+}
+
+// ----------------------------------------------------
+#pragma mark Boruvki Minimal Spanning Tree Algorithm
+// ----------------------------------------------------
+
+
+std::vector<Edge> BoruvkiMinimalSpanningTree(const DenceGraph& graph) {
     return {};
 }
+
 
 } // namespace OtusAlgo
 
