@@ -6,7 +6,7 @@ namespace OtusAlgo {
 
 class IGraph {
 public:
-    using WeightType = int;
+    using WeightType = double;
 public:
     explicit IGraph(bool is_directed): m_is_directed(is_directed) {}
     ~IGraph() = default;
