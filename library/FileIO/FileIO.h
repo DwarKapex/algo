@@ -61,9 +61,7 @@ bool WriteBinaryFile(const std::filesystem::path& output_fname, const std::vecto
         throw std::runtime_error("Cannot open file: " + output_fname.string());
     }
    
-    for (const auto& b: data) {
-        output.write((char*)&b, sizeof(Integer));
-    }
+    output.write(data.data(), data.size());
     output.close();
     return true;
 }

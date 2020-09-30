@@ -61,17 +61,5 @@ int main(int argc, char* argv[]) {
 
     OtusAlgo::WriteBinaryFile(std::filesystem::path(output_file), result);
     
-//    std::vector<char> a{1,1,2,2,3,4,5,6,7};
-//    // improved algo
-//    auto res = OtusAlgo::RLECompress(a);
-//    auto deres = OtusAlgo::RLEDecompress(res);
-//    assert(a == deres);
-//
-//    // Not improved algo
-//    auto res1 = OtusAlgo::RLECompress(a, false);
-//    auto deres1 = OtusAlgo::RLEDecompress(res1, false);
-//    assert(a == deres1);
-//
-//    assert(res1.size() >= res.size());
     return 0;
 }
