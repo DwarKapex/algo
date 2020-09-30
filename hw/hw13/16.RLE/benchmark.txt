@@ -1,0 +1,8 @@
+		    Compression Ration
+		Simple RLE    Improved RLE
+Text UTF-8	    0.5          1
+BMP		    1.9          4
+JPG		    0.5		 1
+Mp3		    0.5		 1
+mp4	 	    0.5		 1
+Zip		    0.5		 1
