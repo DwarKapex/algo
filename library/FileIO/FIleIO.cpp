@@ -43,5 +43,8 @@ bool CompareBinaryFiles(std::filesystem::path lhs, std::filesystem::path rhs) {
 //                    std::istreambuf_iterator<char>(),
 //                    std::istreambuf_iterator<char>(rFile.rdbuf()));
 }
+
+
+
 }
 

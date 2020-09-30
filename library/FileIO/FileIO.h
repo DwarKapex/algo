@@ -39,4 +39,32 @@ void BinaryFileGenerator(const size_t n, Integer limit, std::filesystem::path fn
 
 bool CompareBinaryFiles(std::filesystem::path lhs, std::filesystem::path rhs);
 
+template<typename Integer = char>
+std::vector<Integer> ReadBinaryFile(const std::filesystem::path& input_fname) {
+    std::ifstream input(input_fname.string(), std::ios::binary);
+    if (!input.is_open()) {
+        throw std::runtime_error("Cannot open file: " + input_fname.string());
+    }
+    input.seekg(0, std::ios::end);
+    auto input_size = input.tellg();
+    std::vector<Integer> buf(input_size);
+    input.seekg(0, std::ios::beg);
+    input.read(buf.data(), input_size);
+    input.close();
+    return buf;
+}
+
+template<typename Integer = char>
+bool WriteBinaryFile(const std::filesystem::path& output_fname, const std::vector<Integer>& data){
+    std::ofstream output(output_fname.string(), std::ios::binary);
+    if (!output.is_open()) {
+        throw std::runtime_error("Cannot open file: " + output_fname.string());
+    }
+   
+    for (const auto& b: data) {
+        output.write((char*)&b, sizeof(Integer));
+    }
+    output.close();
+    return true;
+}
 }
